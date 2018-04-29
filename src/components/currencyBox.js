@@ -4,7 +4,9 @@ import 'bulma/css/bulma.css'
 import getCurrency from '../api'
 
 
-
+// Box that displays currency name and price
+// there is a refresh button that refreshes the price
+// theres a 50s rate limit for consecutive calls
 class CurrencyBox extends Component {
 	constructor(props){
 		super(props);
@@ -14,8 +16,6 @@ class CurrencyBox extends Component {
 
 		this.state = {'name':this.props.currencyName,
 		'price': this.getPrice(this.props.currencyName)};
-		
-
 	}
 
 	getPrice(currencyName) {
@@ -23,12 +23,9 @@ class CurrencyBox extends Component {
 	  		let price = res["USD"].toString()
 	  		let tempState = {'name':this.props.currencyName}
 	  		tempState['price'] = price
-	  		// console.log(tempState)
 	  		this.setState(tempState)
 	  	}).catch((err)=>{
 	  		console.log(err)
-	  		alert('Cant get price');
-	  		return 'Failed to get price'
 	  	})
 	}
 
@@ -42,9 +39,10 @@ class CurrencyBox extends Component {
 			this.refresh()
 			console.log(this.props.currencyName,this.state.name)
 		}
+
 		return (
 			<div className="box ">
-		      <p className="title is-3 ">CURRENCY: {this.props.currencyName}</p>
+		      <p className="title is-5 ">CURRENCY: {this.props.currencyName}</p>
 		      <p className="subtitle">$ {this.state.price} </p>
 		      <a className="button" onClick={this.refresh}>Refresh </a>
 		    </div>

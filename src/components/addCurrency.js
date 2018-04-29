@@ -4,6 +4,7 @@ import 'bulma/css/bulma.css'
 import getCurrency from '../api'
 
 
+// Text input and button to add currencies to the currency list menu
 class AddCurrency extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +24,7 @@ class AddCurrency extends Component {
   		this.props.addValidSymbol(currencyName)
     	event.persist();
   	}).catch((err)=>{
-  		alert('Currency not listed');
+  		console.log(err)
     	event.persist();
   	})
   }

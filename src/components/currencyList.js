@@ -5,13 +5,19 @@ import AddCurrency from './addCurrency.js'
 const _  = require('lodash')
 
 
-
-
-
+// Menu to hold currency list
+// the currency list contains buttons to change
+// the currently viewed currency and also delete buttons 
+// for added currencies
 class CurrencyList extends Component {
 	constructor(props){
 		super(props);
-		this.state = {'currencies':['BTC','ETH']}
+
+		let initialize = JSON.parse(sessionStorage.getItem('currencies') || '[]')
+
+		this.state = {'currencies': initialize}
+
+		this.defaultCurrencies = ['BTC','ETH']
 
 		this.addCurrency = this.addCurrency.bind(this)
 		this.removeCurrency = this.removeCurrency.bind(this)
@@ -19,12 +25,20 @@ class CurrencyList extends Component {
 	}
 
 
-	changeCurrency(event) {
-		this.props.viewCurrency(event.currency);
-	}
-
-
 	renderList(currencies) {
+
+		let defaultItems = this.defaultCurrencies.map((curr) =>
+		<li key={curr}>
+			<div className="field is-grouped">
+			  <p className="control">
+			    <a className="button" onClick={()=>{this.changeCurrency({'currency':curr})}}>
+			      {curr}
+			    </a>
+			  </p>
+			</div>
+			<p />	
+		</li>		
+		)
 
 		let listItems = currencies.map((currency) =>
     	<li key={currency}>
@@ -46,6 +60,7 @@ class CurrencyList extends Component {
 
 		return (
 			<ul>
+			{defaultItems}
 			{listItems}
 			</ul>
 		)
@@ -54,6 +69,7 @@ class CurrencyList extends Component {
 	removeCurrency(currency) {
 		let tempState = this.state
 		tempState['currencies'] = _.pull(tempState['currencies'],currency)
+		sessionStorage.setItem('currencies',JSON.stringify(tempState['currencies']))
 		this.setState(tempState)
 	}
 
@@ -61,9 +77,13 @@ class CurrencyList extends Component {
 		let tempState = this.state
 		if(_.indexOf(tempState['currencies'],event) === -1)
 			tempState['currencies'].push(event) 
+		sessionStorage.setItem('currencies',JSON.stringify(tempState['currencies']))
 		this.setState(tempState)
 	}
 
+	changeCurrency(event) {
+		this.props.viewCurrency(event.currency);
+	}
 
 
 	render() {

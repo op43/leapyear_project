@@ -5,6 +5,8 @@ import './App.css'
 import CurrencyList from './components/currencyList.js' 
 import CurrencyBox from './components/currencyBox.js' 
 
+
+// Main app to be rendered by index.js
 class App extends Component {
 	constructor(props) {
 		super(props)
