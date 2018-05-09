@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import 'bulma/css/bulma.css'
 
+import axios from 'axios'
+
 import AddCurrency from './addCurrency.js' 
 const _  = require('lodash')
 
@@ -22,6 +24,7 @@ class CurrencyList extends Component {
 		this.addCurrency = this.addCurrency.bind(this)
 		this.removeCurrency = this.removeCurrency.bind(this)
 		this.changeCurrency = this.changeCurrency.bind(this)
+		this.getCurrencyList = this.getCurrencyList.bind(this)
 	}
 
 
@@ -40,7 +43,8 @@ class CurrencyList extends Component {
 		</li>		
 		)
 
-		let listItems = currencies.map((currency) =>
+		let addedCurrencies = _.difference(currencies,this.defaultCurrencies)
+		let listItems = addedCurrencies.map((currency) =>
     	<li key={currency}>
 			<div className="field is-grouped">
 			  <p className="control">
@@ -67,22 +71,38 @@ class CurrencyList extends Component {
 	}
 
 	removeCurrency(currency) {
-		let tempState = this.state
-		tempState['currencies'] = _.pull(tempState['currencies'],currency)
-		sessionStorage.setItem('currencies',JSON.stringify(tempState['currencies']))
-		this.setState(tempState)
+		let apiCall = 'http://localhost:5000/currency/' + currency
+		axios.delete(apiCall)
+		.then(res=>{
+			return this.getCurrencyList()
+		}).then(res => this.setState({ 'currencies': res }))
+	      .catch(err => console.log(err));
 	}
 
 	addCurrency(event) {
-		let tempState = this.state
-		if(_.indexOf(tempState['currencies'],event) === -1)
-			tempState['currencies'].push(event) 
-		sessionStorage.setItem('currencies',JSON.stringify(tempState['currencies']))
-		this.setState(tempState)
+		this.getCurrencyList()
+	      .then(res => this.setState({ 'currencies': res }))
+	      .catch(err => console.log(err));
 	}
 
 	changeCurrency(event) {
 		this.props.viewCurrency(event.currency);
+	}
+
+	getCurrencyList() {
+		let apiCall = 'http://localhost:5000/currency'
+	 	return axios.get(apiCall).then((res)=>{
+	 		let list = res.data
+	  		return list
+	  	}).catch((err)=>{
+	  		console.log(err)
+	  	})
+	}
+
+	componentDidMount() {
+	    this.getCurrencyList()
+	      .then(res => this.setState({ 'currencies': res }))
+	      .catch(err => console.log(err));
 	}
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import 'bulma/css/bulma.css'
 
-import getCurrency from '../api'
+import axios from 'axios'
 
 
 // Box that displays currency name and price
@@ -19,8 +19,9 @@ class CurrencyBox extends Component {
 	}
 
 	getPrice(currencyName) {
-		getCurrency(currencyName).then((res)=>{
-	  		let price = res["USD"].toString()
+	 	let apiCall = 'http://localhost:5000/currency/'+currencyName
+	 	axios.get(apiCall).then((res)=>{
+	 		let price = res.data["USD"].toString()
 	  		let tempState = {'name':this.props.currencyName}
 	  		tempState['price'] = price
 	  		this.setState(tempState)
@@ -37,14 +38,15 @@ class CurrencyBox extends Component {
 	render() {
 		if(this.state.name !== this.props.currencyName){
 			this.refresh()
-			console.log(this.props.currencyName,this.state.name)
 		}
 
 		return (
 			<div className="box ">
 		      <p className="title is-5 ">CURRENCY: {this.props.currencyName}</p>
 		      <p className="subtitle">$ {this.state.price} </p>
-		      <a className="button" onClick={this.refresh}>Refresh </a>
+		      <a className="button" onClick={this.refresh}>
+		      	Refresh
+			  </a>
 		    </div>
 		)
 	}

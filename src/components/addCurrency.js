@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import 'bulma/css/bulma.css'
+import axios from 'axios'
 
-import getCurrency from '../api'
 
 
 // Text input and button to add currencies to the currency list menu
@@ -19,14 +19,23 @@ class AddCurrency extends Component {
   }
 
   handleButtonSubmit(event) {
-  	getCurrency(this.state.value).then((res)=>{
-  		let currencyName = res["name"].toString()
-  		this.props.addValidSymbol(currencyName)
-    	event.persist();
-  	}).catch((err)=>{
-  		console.log(err)
-    	event.persist();
-  	})
+    let currencyName = this.state.value
+    let apiCall = 'http://localhost:5000/currency/' + currencyName;
+    axios.put(apiCall)
+    .then(res => {
+      console.log(res)
+       let currencyName = this.state.value
+       this.props.addValidSymbol(currencyName)
+    })
+    .catch(err => console.log(err))
+  	// getCurrency(this.state.value).then((res)=>{
+  	// 	let currencyName = res["name"].toString()
+  	// 	this.props.addValidSymbol(currencyName)
+   //  	event.persist();
+  	// }).catch((err)=>{
+  	// 	console.log(err)
+   //  	event.persist();
+  	// })
   }
 
   render() {
