@@ -5,8 +5,8 @@ import axios from 'axios'
 
 
 // Box that displays currency name and price
-// there is a refresh button that refreshes the price
-// theres a 50s rate limit for consecutive calls
+// Refresh button retreives latest updated currency price
+// from server.js
 class CurrencyBox extends Component {
 	constructor(props){
 		super(props);

@@ -1,17 +1,13 @@
 const app = require('express')()
 const firebase = require('./firebase')
 const port = 5000
-const apiCalls = require('./apiCall')
 
+const _  = require('lodash')
 const cors = require('cors')
-
+const axios = require('axios')
 
 let db = firebase.database()
 
-const axios = require('axios')
-
-
-const _  = require('lodash')
 
 
 let updateCurrency = (currencyName) => {
@@ -30,8 +26,6 @@ let updateCurrency = (currencyName) => {
 	})
 }
 
-
-const permanantListing = ['BTC','ETH']
 
 app.use(cors())
 
@@ -97,7 +91,6 @@ let poll = () => {
 	db.ref('/test').once('value').then( (snapshot) => {
 		currencies = _.keys(snapshot.val())
 		currencies.forEach((symbol) => {
-			console.log(symbol)
 			updateCurrency(symbol)
 			.then((currency)=>{
 				db.ref('/test/'+symbol).set(currency)

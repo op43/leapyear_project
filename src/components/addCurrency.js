@@ -28,14 +28,6 @@ class AddCurrency extends Component {
        this.props.addValidSymbol(currencyName)
     })
     .catch(err => console.log(err))
-  	// getCurrency(this.state.value).then((res)=>{
-  	// 	let currencyName = res["name"].toString()
-  	// 	this.props.addValidSymbol(currencyName)
-   //  	event.persist();
-  	// }).catch((err)=>{
-  	// 	console.log(err)
-   //  	event.persist();
-  	// })
   }
 
   render() {
